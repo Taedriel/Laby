@@ -61,5 +61,5 @@ class Traducteur(object):
         for i in range(len(self.labTrad)):
             print("")
             for j in range(len(self.labTrad[0])):
-                print([char1 if self.labTrad[i][j] == 1 else char0][0] , end="")
+                print([char1 if self.labTrad[i][j] == 1 else char0][0], end="")
         print("\n")

@@ -1,9 +1,7 @@
 import sys
 from random import randint, random
 from os import system
-from sys import argv
 
-from Pathfinder import *
 from Traducteur import *
 from Case import *
 
@@ -48,7 +46,7 @@ class Labyrinthe(object):
         return retour
 
     def afficher(self):
-        t = Traducteur(self)
+        t = Traducteur(self, self.depart, self.arrivee)
         t.traduire()
         t.afficher("███", "   ")
 
@@ -140,7 +138,13 @@ class Labyrinthe(object):
             for case in self.getGroup(destination.getId()):
                 case.setId(source.getId())
 
-    def createOuverture(self, listeOuverture=[]):
+    def createOuverture(self, listeOuverture=()):
+        """
+
+        :type listeOuverture: Tuple(Int, Int)
+        """
+        if listeOuverture is None:
+            listeOuverture = []
         while True:
             if random() >= 0.5:
                 # axeY
