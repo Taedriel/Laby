@@ -1,3 +1,6 @@
+from random import random
+
+
 class Pathfinder(object):
 
     def __init__(self, depart, arrivee, plateau):
@@ -6,25 +9,18 @@ class Pathfinder(object):
         self.depart = depart
         self.arrivee = arrivee
 
-        self.actual = self.depart
-
         self.listeVoisin = []
-        self.listeCircuit = {0: []}
-        self.caseVisite = {0: []}
+        self.listeCircuit = []
+        self.caseVisite = []
+        self.circuit = []
 
-        self.getNextStep(0)
-        print(self.findPath())
-        self.setPath(self.findPath())
+        self.testOneWay(0)
+        self.setPath(self.circuit)
 
     def setPath(self, listCell):
         for cell in listCell:
             self.plateau.setCell(cell[1], cell[2], 2)
 
-
-    def findPath(self):
-        for key, list in self.listeCircuit.items():
-            if self.arrivee in list:
-                return list
     """
     def getCaseDebut(self):
         if self.depart[2] == 1 or self.depart[2] == self.plateau.getTailleX() - 1:
@@ -53,8 +49,8 @@ class Pathfinder(object):
                 self.listeCircuit.insert(0, case)
     """
 
-    def getValideCell(self):
-        self.getVoisin()
+    def getValideCell(self, coord):
+        self.getVoisin(coord)
         caseValide = []
 
         for eachCase in self.listeVoisin:
@@ -63,64 +59,57 @@ class Pathfinder(object):
 
         return caseValide if len(caseValide) != 0 else None
 
-    def getNextStep(self, key):
+    def testOneWay(self, id):
         """
-        on ajoute actual au path
         on verifie si il y a d'autre case dispo
-            si oui, recursivité avec caseActuel = case[random]
-                des qu'on revient on copy le path et on conitnu comme ça
             si non
                 on remonte
+            si oui, recursivité avec caseActuel sur chacun des cases
+                on ajoute a la liste actuelle
         """
-        self.listeCircuit.get(key).append(self.actual)
-        self.caseVisite.get(key).append(self.actual)
 
-        print(len(self.listeCircuit))
+        cell = self.depart
+        cases = self.getValideCell(cell)
 
-        case = self.getValideCell()
-        if case is None:
-            # on est au bout d'un chemin
-            return
-        else:
-            for each in case:
-                if each not in self.caseVisite.get(key):
-                    self.actual = each
-                    newkey = len(self.listeCircuit)
-                    self.listeCircuit[newkey] = self.listeCircuit.get(newkey - 1)
-                    self.caseVisite[newkey] = self.caseVisite.get(newkey - 1)
-                    self.getNextStep(newkey)
-            return
+        while len(cases) > 0:
+            self.circuit.insert(0, cell)
+            cell  = cases[int(random() * len(cases) - 1)]
+            cases = self.getValideCell(cell)
+            for case in cases:
+                if case in self.circuit:
+                    cases.remove(case)
 
-    def getVoisin(self):
+
+    def getVoisin(self, coord):
         self.listeVoisin.clear()
-        if self.actual[1] > 0 and self.actual[2] > 0:
+        if coord[1] > 0 and coord[2] > 0:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1] - 1, self.actual[2] - 1)), self.actual[1] - 1, self.actual[2] - 1))
+                (self.plateau.get((coord[1] - 1, coord[2] - 1)), coord[1] - 1, coord[2] - 1))
 
-        if self.actual[1] > 0:
+        if coord[1] > 0:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1] - 1, self.actual[2])), self.actual[1] - 1, self.actual[2]))
+                (self.plateau.get((coord[1] - 1, coord[2])), coord[1] - 1, coord[2]))
 
-        if self.actual[1] > 0 and self.actual[2] < self.plateau.getTailleY() - 1:
+        if coord[1] > 0 and coord[2] < self.plateau.getTailleY() - 1:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1] - 1, self.actual[2] + 1)), self.actual[1] - 1, self.actual[2] + 1))
+                (self.plateau.get((coord[1] - 1, coord[2] + 1)), coord[1] - 1, coord[2] + 1))
 
-        if self.actual[2] < self.plateau.getTailleY() - 1:
+        if coord[2] < self.plateau.getTailleY() - 1:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1], self.actual[2] + 1)), self.actual[1], self.actual[2] + 1))
+                (self.plateau.get((coord[1], coord[2] + 1)), coord[1], coord[2] + 1))
 
-        if self.actual[1] < self.plateau.getTailleX() - 1 and self.actual[2] < self.plateau.getTailleY() - 1:
+        if coord[1] < self.plateau.getTailleX() - 1 and coord[2] < self.plateau.getTailleY() - 1:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1] + 1, self.actual[2] + 1)), self.actual[1] + 1, self.actual[2] + 1))
+                (self.plateau.get((coord[1] + 1, coord[2] + 1)), coord[1] + 1, coord[2] + 1))
 
-        if self.actual[1] < self.plateau.getTailleX() - 1:
+        if coord[1] < self.plateau.getTailleX() - 1:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1] + 1, self.actual[2])), self.actual[1] + 1, self.actual[2]))
+                (self.plateau.get((coord[1] + 1, coord[2])), coord[1] + 1, coord[2]))
 
-        if self.actual[1] < self.plateau.getTailleX() - 1 and self.actual[2] > 0:
+        if coord[1] < self.plateau.getTailleX() - 1 and coord[2] > 0:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1] + 1, self.actual[2] - 1)), self.actual[1] + 1, self.actual[2] - 1))
+                (self.plateau.get((coord[1] + 1, coord[2] - 1)), coord[1] + 1, coord[2] - 1))
 
-        if self.actual[2] > 0:
+        if coord[2] > 0:
             self.listeVoisin.append(
-                (self.plateau.get((self.actual[1], self.actual[2] - 1)), self.actual[1], self.actual[2] - 1))
+                (self.plateau.get((coord[1], coord[2] - 1)), coord[1], coord[2] - 1))

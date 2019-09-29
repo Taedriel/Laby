@@ -39,7 +39,7 @@ if __name__ == "__main__":
         lab.generate(stepByStep)
     """
 
-    lab1 = Labyrinthe(10, 10)
+    lab1 = Labyrinthe(3,3)
     lab1.generate(False)
     trad = Traducteur(lab1, lab1.getDepart(), lab1.getArrive())
     trad.traduire()
