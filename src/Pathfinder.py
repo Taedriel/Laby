@@ -13,11 +13,18 @@ class Pathfinder(object):
         self.caseVisite = {0: []}
 
         self.getNextStep(0)
+        print(self.findPath())
+        self.setPath(self.findPath())
+
+    def setPath(self, listCell):
+        for cell in listCell:
+            self.plateau.setCell(cell[1], cell[2], 2)
+
 
     def findPath(self):
-        while self.actual != self.arrivee:
-            self.getNextStep()
-
+        for key, list in self.listeCircuit.items():
+            if self.arrivee in list:
+                return list
     """
     def getCaseDebut(self):
         if self.depart[2] == 1 or self.depart[2] == self.plateau.getTailleX() - 1:
@@ -65,15 +72,10 @@ class Pathfinder(object):
             si non
                 on remonte
         """
+        self.listeCircuit.get(key).append(self.actual)
+        self.caseVisite.get(key).append(self.actual)
 
-        if self.actual not in self.caseVisite.get(key):
-            self.listeCircuit.get(key).append(self.actual)
-            self.caseVisite.get(key).append(self.actual)
-        else:
-            return
-
-        print(self.listeCircuit)
-
+        print(len(self.listeCircuit))
 
         case = self.getValideCell()
         if case is None:
@@ -81,10 +83,12 @@ class Pathfinder(object):
             return
         else:
             for each in case:
-                self.actual = each
-                self.getNextStep(key)
-                self.listeCircuit[key + 1] = self.listeCircuit.get(key)
-                key += 1
+                if each not in self.caseVisite.get(key):
+                    self.actual = each
+                    newkey = len(self.listeCircuit)
+                    self.listeCircuit[newkey] = self.listeCircuit.get(newkey - 1)
+                    self.caseVisite[newkey] = self.caseVisite.get(newkey - 1)
+                    self.getNextStep(newkey)
             return
 
     def getVoisin(self):

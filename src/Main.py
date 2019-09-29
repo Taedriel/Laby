@@ -3,7 +3,6 @@ from Pathfinder import Pathfinder
 from Traducteur import Traducteur
 from sys import argv
 
-
 if __name__ == "__main__":
     """
     if len(argv) == 1:
@@ -44,5 +43,6 @@ if __name__ == "__main__":
     lab1.generate(False)
     trad = Traducteur(lab1, lab1.getDepart(), lab1.getArrive())
     trad.traduire()
-    trad.afficher("███", "   ")
+    trad.afficher("███", "   ", "...")
     path = Pathfinder(trad.getDepart(), trad.getArrivee(), trad.getTraducteur())
+    trad.afficher("███", "   ", "...")

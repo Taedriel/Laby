@@ -15,6 +15,9 @@ class Traducteur(object):
                 temp.append(1)
             self.labTrad.append(temp)
 
+    def setCell(self, x, y, content):
+        self.labTrad[x][y] = content
+
     def getTailleY(self):
         return len(self.labTrad[0])
 
@@ -57,9 +60,9 @@ class Traducteur(object):
                 if number & O == O:
                     self.labTrad[i * 2][j * 2 + 1] = 0
 
-    def afficher(self, char1="1", char0="0"):
+    def afficher(self, char1="1", char0="0", char2="2"):
         for i in range(len(self.labTrad)):
             print("")
             for j in range(len(self.labTrad[0])):
-                print([char1 if self.labTrad[i][j] == 1 else char0][0], end="")
+                print([char1 if self.labTrad[i][j] == 1 else (char2 if self.labTrad[i][j] == 2 else char0)][0], end="")
         print("\n")
