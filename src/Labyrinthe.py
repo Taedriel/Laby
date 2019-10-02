@@ -48,7 +48,7 @@ class Labyrinthe(object):
     def afficher(self):
         t = Traducteur(self, self.depart, self.arrivee)
         t.traduire()
-        t.afficher("███", "   ")
+        t.afficher(w="███", v="   ")
 
     def getGroup(self, idCell):
         group = []

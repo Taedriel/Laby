@@ -1,3 +1,6 @@
+from CONST import *
+
+
 class Traducteur(object):
     def __init__(self, labyrinthe, depart, arrivee):
         """labyrinthe, depart, arrivée"""
@@ -12,7 +15,7 @@ class Traducteur(object):
         for i in range(self.tailleX * 2 + 1):
             temp = []
             for j in range(self.tailleY * 2 + 1):
-                temp.append(1)
+                temp.append(WALL)
             self.labTrad.append(temp)
 
     def setCell(self, x, y, content):
@@ -31,12 +34,12 @@ class Traducteur(object):
         return self.labTrad[coord[0]][coord[1]]
 
     def getDepart(self):
-        print(0, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1)
-        return 0, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1
+        print(VOID, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1)
+        return VOID, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1
 
     def getArrivee(self):
-        print(0, self.arrivee[0] * 2 + 1, self.arrivee[1] * 2 + 1)
-        return 0, self.arrivee[0] * 2 + 1, self.arrivee[1] * 2 + 1
+        print(VOID, self.arrivee[0] * 2 + 1, self.arrivee[1] * 2 + 1)
+        return VOID, self.arrivee[0] * 2 + 1, self.arrivee[1] * 2 + 1
 
     def traduire(self):
 
@@ -46,23 +49,31 @@ class Traducteur(object):
                 case = self.lab.getCell(i, j)
                 number = case.getWall()
 
-                self.labTrad[i * 2 + 1][j * 2 + 1] = 0
+                self.labTrad[i * 2 + 1][j * 2 + 1] = VOID
 
                 if number & N == N:
-                    self.labTrad[i * 2 + 1][j * 2] = 0
+                    self.labTrad[i * 2 + 1][j * 2] = VOID
 
                 if number & E == E:
-                    self.labTrad[i * 2 + 2][j * 2 + 1] = 0
+                    self.labTrad[i * 2 + 2][j * 2 + 1] = VOID
 
                 if number & S == S:
-                    self.labTrad[i * 2 + 1][j * 2 + 2] = 0
+                    self.labTrad[i * 2 + 1][j * 2 + 2] = VOID
 
                 if number & O == O:
-                    self.labTrad[i * 2][j * 2 + 1] = 0
+                    self.labTrad[i * 2][j * 2 + 1] = VOID
 
-    def afficher(self, char1="1", char0="0", char2="2"):
+    def afficher(self, **keyword):
         for i in range(len(self.labTrad)):
             print("")
             for j in range(len(self.labTrad[0])):
-                print([char1 if self.labTrad[i][j] == 1 else (char2 if self.labTrad[i][j] == 2 else char0)][0], end="")
+                if len(keyword) != 0:
+                    try:
+                        char = keyword[str(self.labTrad[i][j])]
+                    except KeyError:
+                        char = "???"
+
+                    print(char, end="")
+                else:
+                    print(self.labTrad[i][j], end="")
         print("\n")
