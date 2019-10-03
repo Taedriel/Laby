@@ -33,6 +33,14 @@ class Traducteur(object):
     def get(self, coord):
         return self.labTrad[coord[0]][coord[1]]
 
+    def doAHole(self, taille):
+        midY = int(self.getTailleY() / 2)
+        midX = int(self.getTailleX() / 2)
+
+        for x in range(midX - int(taille/2)):
+            for y in range(midY - int(taille/2)):
+                self.labTrad[x][y] = VOID
+
     def getDepart(self):
         print(VOID, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1)
         return VOID, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1
