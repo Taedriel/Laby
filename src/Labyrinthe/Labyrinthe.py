@@ -2,8 +2,8 @@ import sys
 from random import randint, random
 from os import system
 
-from Traducteur import *
-from Case import *
+from Labyrinthe.Traducteur import *
+from Labyrinthe.Case import *
 
 
 class Labyrinthe(object):
