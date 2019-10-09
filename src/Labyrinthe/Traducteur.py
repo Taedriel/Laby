@@ -30,6 +30,9 @@ class Traducteur(object):
     def getTraducteur(self):
         return self
 
+    def getLabTrad(self):
+        return self.labTrad
+
     def get(self, coord):
         return self.labTrad[coord[0]][coord[1]]
 

@@ -3,5 +3,5 @@ PATH = 'p'
 WALL = 'w'
 VOID = 'v'
 ENNEMIE = 'e'
-LARGEUR = 10
-HAUTEUR = 10
+LARGEUR = 22
+HAUTEUR = 22
