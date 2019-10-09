@@ -1,7 +1,8 @@
 from tkinter import *
 from CONST import *
-from Labyrinthe.Labyrinthe import Labyrinthe
-from Labyrinthe.Traducteur import Traducteur
+from Labyrinthe import Labyrinthe
+from Traducteur import Traducteur
+from Personnage import *
 
 
 class Moteur():
@@ -29,14 +30,32 @@ class Moteur():
 
         self.paintGrid()
 
+    def setPerso(self, perso):
+        self.perso = perso
+
+    def bindControle(self):
+        self.screen.bind('<Up>', self.perso.moveUp)
+        self.screen.bind('<Down>', self.perso.moveDown)
+        self.screen.bind('<Left>', self.perso.moveLeft)
+        self.screen.bind('<Right>', self.perso.moveRight)
+
+    def getGrid(self):
+        return self.grid
+
     def paintGrid(self):
+
+        for item in self.screen.find_all():
+            self.screen.delete(item)
 
         posX, posY = 0, 0
 
         for x in self.grid:
             for y in x:
+
                 if y == WALL:
                     self.screen.create_rectangle(posX, posY, posX + LARGEUR, posY + HAUTEUR, fill="black")
+                if y == PERSO:
+                    self.screen.create_oval(posX, posY, posX + LARGEUR, posY + HAUTEUR, fill="red")
 
                 posX += LARGEUR
             posX = 0
@@ -51,6 +70,10 @@ if __name__ == "__main__":
     lab.generate(False)
     trad = Traducteur(lab, lab.getDepart(), lab.getArrive())
     trad.traduire()
+    trad.setCell(lab.getDepart()[0], lab.getDepart()[1], PERSO)
     mot = Moteur(trad.getLabTrad())
+    p = Perso(mot, trad, lab.getDepart()[0], lab.getDepart()[1])
+    mot.setPerso(p)
+    mot.bindControle()
 
     mot.run()

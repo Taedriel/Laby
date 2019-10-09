@@ -1,6 +1,6 @@
-from Labyrinthe.Labyrinthe import Labyrinthe
-from Labyrinthe.Pathfinder import Pathfinder
-from Labyrinthe.Traducteur import Traducteur
+from Labyrinthe import Labyrinthe
+from Pathfinder import Pathfinder
+from Traducteur import Traducteur
 from sys import argv
 
 if __name__ == "__main__":
