@@ -8,6 +8,8 @@ class Traducteur(object):
         self.tailleX = len(self.lab.getLab())
         self.tailleY = len(self.lab.getLab()[0])
 
+        self.observer = []
+
         self.depart = depart
         self.arrivee = arrivee
 
@@ -18,8 +20,16 @@ class Traducteur(object):
                 temp.append(WALL)
             self.labTrad.append(temp)
 
+    def addObserver(self, observer):
+        self.observer.append(observer)
+
+    def notifyAll(self, action):
+        for obs in self.observer:
+            obs.notify(action)
+
     def setCell(self, x, y, content):
         self.labTrad[x][y] = content
+        self.notifyAll(UPDATE)
 
     def getTailleY(self):
         return len(self.labTrad[0])
@@ -33,6 +43,9 @@ class Traducteur(object):
     def getLabTrad(self):
         return self.labTrad
 
+    def getCell(self, x, y):
+        return self.get((x, y))
+
     def get(self, coord):
         return self.labTrad[coord[0]][coord[1]]
 
@@ -40,8 +53,8 @@ class Traducteur(object):
         midY = int(self.getTailleY() / 2)
         midX = int(self.getTailleX() / 2)
 
-        for x in range(midX - int(taille/2)):
-            for y in range(midY - int(taille/2)):
+        for x in range(midX - int(taille / 2)):
+            for y in range(midY - int(taille / 2)):
                 self.labTrad[x][y] = VOID
 
     def getDepart(self):
@@ -73,6 +86,8 @@ class Traducteur(object):
 
                 if number & O == O:
                     self.labTrad[i * 2][j * 2 + 1] = VOID
+        self.notifyAll(UPDATE)
+
 
     def afficher(self, **keyword):
         for i in range(len(self.labTrad)):

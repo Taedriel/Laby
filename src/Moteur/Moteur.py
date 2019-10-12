@@ -1,8 +1,10 @@
 from tkinter import *
 from CONST import *
 from Labyrinthe import Labyrinthe
+from Pathfinder import Pathfinder
 from Traducteur import Traducteur
 from Personnage import *
+from threading import *
 
 
 class Moteur():
@@ -21,7 +23,7 @@ class Moteur():
         self.tailleY = len(self.grid[0]) * HAUTEUR
 
         self.main.geometry(str(self.tailleX) + "x" + str(self.tailleY))
-        self.main.resizable(False, False)
+        self.main.resizable(True, True)
 
         self.elements = {}
 
@@ -30,17 +32,13 @@ class Moteur():
 
         self.paintGrid()
 
-    def setPerso(self, perso):
-        self.perso = perso
-
-    def bindControle(self):
-        self.screen.bind('<Up>', self.perso.moveUp)
-        self.screen.bind('<Down>', self.perso.moveDown)
-        self.screen.bind('<Left>', self.perso.moveLeft)
-        self.screen.bind('<Right>', self.perso.moveRight)
-
     def getGrid(self):
         return self.grid
+
+    def notify(self, action):
+        if action == UPDATE:
+            self.paintGrid()
+
 
     def paintGrid(self):
 
@@ -56,6 +54,10 @@ class Moteur():
                     self.screen.create_rectangle(posX, posY, posX + LARGEUR, posY + HAUTEUR, fill="black")
                 if y == PERSO:
                     self.screen.create_oval(posX, posY, posX + LARGEUR, posY + HAUTEUR, fill="red")
+                if y == PATH:
+                    self.screen.create_oval(posX + LARGEUR/3, posY + HAUTEUR/3, posX + 2* LARGEUR/3, posY + 2*HAUTEUR/3, fill="blue")
+                if y == ENNEMIE:
+                    self.screen.create_oval(posX + LARGEUR/3, posY + HAUTEUR/3, posX + 2* LARGEUR/3, posY + 2*HAUTEUR/3, fill="black")
 
                 posX += LARGEUR
             posX = 0
@@ -66,14 +68,19 @@ class Moteur():
 
 
 if __name__ == "__main__":
-    lab = Labyrinthe(10, 10)
+    lab = Labyrinthe(10, 30)
     lab.generate(False)
     trad = Traducteur(lab, lab.getDepart(), lab.getArrive())
-    trad.traduire()
-    trad.setCell(lab.getDepart()[0], lab.getDepart()[1], PERSO)
+
     mot = Moteur(trad.getLabTrad())
-    p = Perso(mot, trad, lab.getDepart()[0], lab.getDepart()[1])
-    mot.setPerso(p)
-    mot.bindControle()
+
+    trad.addObserver(mot)
+
+    trad.traduire()
+    pathfinder = Pathfinder(trad.getDepart(), trad.getArrivee(), trad)
+    pathfinder.findGoodPath()
+    pathfinder.bindPath()
 
     mot.run()
+
+
