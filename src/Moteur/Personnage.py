@@ -3,42 +3,47 @@ from CONST import *
 
 class Perso(object):
 
-    def __init__(self, moteur, trad, posX, posY):
+    def __init__(self, trad, posX, posY):
 
-        self.moteur = moteur
         self.plateau = trad
 
         self.posX = posX
         self.posY = posY
 
-    def moveUp(self):
-        if self.plateau.getCell(self.posX, self.posY + 1) not in [WALL, ENNEMIE]:
-            self.plateau.setCell(self.posX, self.posY + 1, PERSO)
-            self.plateau.setCell(self.posX, self.posY, VOID)
-            print("up")
-            self.posY += 1
-            self.moteur.paintGrid()
+        print(self.plateau.afficher())
 
-    def moveDown(self):
-        if self.plateau.getCell(self.posX, self.posY - 1) not in [WALL, ENNEMIE]:
-            self.plateau.setCell(self.posX, self.posY - 1, PERSO)
-            self.plateau.setCell(self.posX, self.posY, VOID)
-            print("down")
-            self.posY -= 1
-            self.moteur.paintGrid()
-
-    def moveLeft(self):
+    def moveUp(self, event):
         if self.plateau.getCell(self.posX - 1, self.posY) not in [WALL, ENNEMIE]:
+            self.plateau.setCell(self.posX, self.posY, VOID)
             self.plateau.setCell(self.posX - 1, self.posY, PERSO)
-            self.plateau.setCell(self.posX, self.posY, VOID)
-            print("left")
+            print("up")
             self.posX -= 1
-            self.moteur.paintGrid()
+        else:
+            print("cannot move")
 
-    def moveRight(self):
+    def moveDown(self, event):
         if self.plateau.getCell(self.posX + 1, self.posY) not in [WALL, ENNEMIE]:
-            self.plateau.setCell(self.posX + 1, self.posY, PERSO)
             self.plateau.setCell(self.posX, self.posY, VOID)
-            print("right")
+            self.plateau.setCell(self.posX + 1, self.posY, PERSO)
+            print("down")
             self.posX += 1
-            self.moteur.paintGrid()
+        else:
+            print("cannot move")
+
+    def moveLeft(self, event):
+        if self.plateau.getCell(self.posX, self.posY - 1) not in [WALL, ENNEMIE]:
+            self.plateau.setCell(self.posX, self.posY, VOID)
+            self.plateau.setCell(self.posX, self.posY - 1, PERSO)
+            print("left")
+            self.posY -= 1
+        else:
+            print("cannot move")
+
+    def moveRight(self, event):
+        if self.plateau.getCell(self.posX, self.posY + 1) not in [WALL, ENNEMIE]:
+            self.plateau.setCell(self.posX, self.posY, VOID)
+            self.plateau.setCell(self.posX, self.posY + 1, PERSO)
+            print("right")
+            self.posY += 1
+        else:
+            print("cannot move")

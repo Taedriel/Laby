@@ -1,16 +1,15 @@
 from tkinter import *
-from CONST import *
+
 from Labyrinthe import Labyrinthe
 from Pathfinder import Pathfinder
-from Traducteur import Traducteur
 from Personnage import *
-from threading import *
+from Traducteur import Traducteur
 
 
 class Moteur():
     """inserer de la doc ici"""
 
-    def __init__(self, grid=None):
+    def __init__(self, grid=None, perso=None):
         self.main = Tk()
         self.main.title("MoteurGraphique")
 
@@ -19,18 +18,28 @@ class Moteur():
         else:
             raise (TypeError("Argument grid invalide ou non existant"))
 
-        self.tailleX = len(self.grid) * LARGEUR
-        self.tailleY = len(self.grid[0]) * HAUTEUR
+        self.tailleY = len(self.grid) * LARGEUR
+        self.tailleX = len(self.grid[0]) * HAUTEUR
 
-        self.main.geometry(str(self.tailleX) + "x" + str(self.tailleY))
-        self.main.resizable(True, True)
+        self.main.geometry(str(self.tailleX + 1) + "x" + str(self.tailleY + 1))
+        self.main.resizable(False, False)
 
         self.elements = {}
 
         self.screen = Canvas(self.main, width=self.tailleX, height=self.tailleY, bg="grey", confine=True)
-        self.screen.pack()
+        if perso is not None:
+            print("bind")
+            self.perso = perso
+            self.main.bind("<z>", self.perso.moveUp)
+            self.main.bind("<q>", self.perso.moveLeft)
+            self.main.bind("<s>", self.perso.moveDown)
+            self.main.bind("<d>", self.perso.moveRight)
 
+        self.screen.pack()
         self.paintGrid()
+
+    def test(self):
+        print(42)
 
     def getGrid(self):
         return self.grid
@@ -38,7 +47,6 @@ class Moteur():
     def notify(self, action):
         if action == UPDATE:
             self.paintGrid()
-
 
     def paintGrid(self):
 
@@ -55,9 +63,11 @@ class Moteur():
                 if y == PERSO:
                     self.screen.create_oval(posX, posY, posX + LARGEUR, posY + HAUTEUR, fill="red")
                 if y == PATH:
-                    self.screen.create_oval(posX + LARGEUR/3, posY + HAUTEUR/3, posX + 2* LARGEUR/3, posY + 2*HAUTEUR/3, fill="blue")
+                    self.screen.create_oval(posX + LARGEUR / 3, posY + HAUTEUR / 3, posX + 2 * LARGEUR / 3,
+                                            posY + 2 * HAUTEUR / 3, fill="blue")
                 if y == ENNEMIE:
-                    self.screen.create_oval(posX + LARGEUR/3, posY + HAUTEUR/3, posX + 2* LARGEUR/3, posY + 2*HAUTEUR/3, fill="black")
+                    self.screen.create_oval(posX + LARGEUR / 3, posY + HAUTEUR / 3, posX + 2 * LARGEUR / 3,
+                                            posY + 2 * HAUTEUR / 3, fill="black")
 
                 posX += LARGEUR
             posX = 0
@@ -70,17 +80,21 @@ class Moteur():
 if __name__ == "__main__":
     lab = Labyrinthe(10, 30)
     lab.generate(False)
+
     trad = Traducteur(lab, lab.getDepart(), lab.getArrive())
+    trad.traduire()
 
-    mot = Moteur(trad.getLabTrad())
+    perso = Perso(trad, trad.getDepart()[1], trad.getDepart()[2])
+    trad.setPerso(perso)
 
+    mot = Moteur(trad.getLabTrad(), trad.getPerso())
     trad.addObserver(mot)
 
-    trad.traduire()
+
     pathfinder = Pathfinder(trad.getDepart(), trad.getArrivee(), trad)
     pathfinder.findGoodPath()
     pathfinder.bindPath()
 
+    trad.setCell(trad.getDepart()[1], trad.getDepart()[2], PERSO)
+
     mot.run()
-
-

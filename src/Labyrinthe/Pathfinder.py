@@ -15,9 +15,23 @@ class Pathfinder(object):
 
     def findGoodPath(self):
         self.findAllPath(0)
+
+        min = None
+        pathValide = []
+
         for path in self.listeCircuit:
             if self.arrivee in path:
-                self.circuit = path
+                pathValide.append(path)
+
+        for path in pathValide:
+            if min is None:
+                min = len(path), path
+            else:
+                if len(path) < min[0]:
+                    min = len(path), path
+
+        if min is not None:
+            self.circuit = min[1]
         return None
 
     def bindPath(self):
@@ -47,6 +61,9 @@ class Pathfinder(object):
         """
 
         cases = self.getValideCell(self.listeCircuit[id][-1])
+
+        if cases is None:
+            return
 
         for case in cases:
             if case in self.listeCircuit[id]:

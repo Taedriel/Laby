@@ -9,6 +9,7 @@ class Traducteur(object):
         self.tailleY = len(self.lab.getLab()[0])
 
         self.observer = []
+        self.perso = None
 
         self.depart = depart
         self.arrivee = arrivee
@@ -28,6 +29,7 @@ class Traducteur(object):
             obs.notify(action)
 
     def setCell(self, x, y, content):
+        print(str(x) + "/" + str(y) + " = " + str(content))
         self.labTrad[x][y] = content
         self.notifyAll(UPDATE)
 
@@ -58,11 +60,9 @@ class Traducteur(object):
                 self.labTrad[x][y] = VOID
 
     def getDepart(self):
-        print(VOID, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1)
         return VOID, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1
 
     def getArrivee(self):
-        print(VOID, self.arrivee[0] * 2 + 1, self.arrivee[1] * 2 + 1)
         return VOID, self.arrivee[0] * 2 + 1, self.arrivee[1] * 2 + 1
 
     def traduire(self):
@@ -86,8 +86,6 @@ class Traducteur(object):
 
                 if number & O == O:
                     self.labTrad[i * 2][j * 2 + 1] = VOID
-        self.notifyAll(UPDATE)
-
 
     def afficher(self, **keyword):
         for i in range(len(self.labTrad)):
@@ -103,3 +101,9 @@ class Traducteur(object):
                 else:
                     print(self.labTrad[i][j], end="")
         print("\n")
+
+    def setPerso(self, perso):
+        self.perso = perso
+
+    def getPerso(self):
+        return self.perso

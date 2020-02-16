@@ -1,7 +1,9 @@
+from sys import argv
+
 from Labyrinthe import Labyrinthe
+from Moteur import Moteur
 from Pathfinder import Pathfinder
 from Traducteur import Traducteur
-from sys import argv
 
 if __name__ == "__main__":
 
@@ -16,7 +18,7 @@ if __name__ == "__main__":
         if "-x" in argv:
             try:
                 tailleX = int(argv[argv.index("-x") + 1])
-            except ValueError:
+            except ValueError:  
                 tailleX = 10
         else:
             tailleX = 10
@@ -45,3 +47,7 @@ if __name__ == "__main__":
             path.findGoodPath()
             path.bindPath()
             trad.afficher(w="███", v="   ", p=" 0 ")
+
+        if "-graph" in argv:
+            mot = Moteur(trad.getLabTrad())
+            mot.run()
