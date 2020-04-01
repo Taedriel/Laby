@@ -1,4 +1,4 @@
-from __const__ import *
+from .__const__ import *
 
 class Pathfinder(object):
 

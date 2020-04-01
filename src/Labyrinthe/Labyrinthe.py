@@ -3,9 +3,9 @@ from os import system
 
 import sys
 
-from __const__ import *
-from _Case import Case
-from _Traducteur import Traducteur
+from .__const__ import *
+from ._Case import Case
+from ._Traducteur import Traducteur
 
 class Labyrinthe(object):
 

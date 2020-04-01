@@ -1,10 +1,10 @@
-from __const__ import *
+from .__const__ import *
 from tkinter import *
 
-from _Pathfinder import Pathfinder
-from _Personnage import Perso
-from _Traducteur import Traducteur
-from Labyrinthe import Labyrinthe
+from ._Pathfinder import Pathfinder
+from ._Personnage import Perso
+from ._Traducteur import Traducteur
+from .Labyrinthe import Labyrinthe
 
 
 class Moteur():

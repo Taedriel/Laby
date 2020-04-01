@@ -2,19 +2,16 @@
 from sys import argv
 from os import getcwd
 
-from Labyrinthe import *
+import Labyrinthe as Lab_Pack
 
 if __name__ == "__main__":
 
-    print(getcwd())
-
-
-    if len(argv) == 1:
-        lab1 = Labyrinthe(10, 10)
+    if len(argv) == 1:  
+        lab1 = Lab_Pack.Labyrinthe(10, 10)
         lab1.generate(False)
     else:
         if argv[1] == "-h":
-            print("help: python3 Labyrinthe.py [-h] | [-x (number) -y (number)] | [-step] | [-solve]")
+            print("help: python3 Labyrinthe.py [-h] | [-x (number) -y (number)] | [-step] | [-solve] | [-graph]")
             exit(0)
 
         if "-x" in argv:
@@ -38,18 +35,18 @@ if __name__ == "__main__":
         else:
             stepByStep = False
 
-        lab = Labyrinthe(tailleX, tailleY)
+        lab = Lab_Pack.Labyrinthe(tailleX, tailleY)
         lab.generate(stepByStep)
-        trad = Traducteur(lab, lab.getDepart(), lab.getArrive())
+        trad = Lab_Pack.Traducteur(lab, lab.getDepart(), lab.getArrive())
         trad.traduire()
         trad.afficher()
 
         if "-solve" in argv:
-            path = Pathfinder(trad.getDepart(), trad.getArrivee(), trad.getTraducteur())
+            path = Lab_Pack.Pathfinder(trad.getDepart(), trad.getArrivee(), trad.getTraducteur())
             path.findGoodPath()
             path.bindPath()
             trad.afficher(w="███", v="   ", p=" 0 ")
 
         if "-graph" in argv:
-            mot = Moteur(trad.getLabTrad())
+            mot = Lab_Pack.Moteur(trad.getLabTrad())
             mot.run()

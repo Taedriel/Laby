@@ -1,4 +1,4 @@
-from __const__ import *
+from .__const__ import *
 
 class Traducteur(object):
     def __init__(self, labyrinthe, depart, arrivee):
