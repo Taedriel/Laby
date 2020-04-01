@@ -14,7 +14,7 @@ if __name__ == "__main__":
         trad.afficher(w="███", v="   ", p=" 0 ")
     else:
         if argv[1] == "-h":
-            print("help: python3 Labyrinthe.py [-h] | ([-x (number) -y (number)] | [-step] | [-solve] | [-graph] | [-v] | [-play])")
+            print("help: python3 Main.py [-h] | ([-x (number) -y (number)] | [-step] | [-solve] | [-graph] | [-v] | [-play])")
             exit(0)
 
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
             perso = Lab_Pack.Perso(trad, trad.getDepart()[1], trad.getDepart()[2])
             trad.setPerso(perso)
 
-            mot = Lab_Pack.Moteur(trad.getLabTrad(), trad.getPerso())
+            mot = Lab_Pack.Moteur(trad.getLabTrad(), trad.getPerso(), trad.getArrivee())
             trad.addObserver(mot)
 
             trad.setCell(trad.getDepart()[1], trad.getDepart()[2], Lab_Pack.PERSO)

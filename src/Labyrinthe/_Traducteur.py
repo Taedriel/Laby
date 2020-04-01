@@ -61,6 +61,11 @@ class Traducteur(object):
     def getDepart(self):
         return VOID, self.depart[0] * 2 + 1, self.depart[1] * 2 + 1
 
+    """return un tuple consitué de trois elements : 
+        - le contenue de la cellule
+        - coordonnée X
+        - coordonnée Y
+    """
     def getArrivee(self):
         return VOID, self.arrivee[0] * 2 + 1, self.arrivee[1] * 2 + 1
 

@@ -10,7 +10,7 @@ from .Labyrinthe import Labyrinthe
 class Moteur():
     """inserer de la doc ici"""
 
-    def __init__(self, grid=None, perso=None):
+    def __init__(self, grid=None, perso=None, arrive=None):
         self.main = Tk()
         self.main.title("MoteurGraphique")
 
@@ -18,6 +18,8 @@ class Moteur():
             self.grid = grid
         else:
             raise (TypeError("Argument grid invalide ou non existant"))
+
+        self.arrive = arrive
 
         self.tailleY = len(self.grid) * LARGEUR
         self.tailleX = len(self.grid[0]) * HAUTEUR
@@ -39,15 +41,22 @@ class Moteur():
         self.screen.pack()
         self.paintGrid()
 
-    def test(self):
-        print(42)
-
     def getGrid(self):
         return self.grid
 
     def notify(self, action):
         if action == UPDATE:
             self.paintGrid()
+            self.continuer = not self.isWin()
+
+    def isWin(self):
+        print(self.perso.posX, self.perso.posY, self.arrive)
+        if int(self.perso.posX) == int(self.arrive[1]) and int(self.perso.posY) == int(self.arrive[2]):
+            print("True")
+            return True
+        else:
+            print("False")
+            return False
 
     def paintGrid(self):
 
@@ -75,8 +84,14 @@ class Moteur():
             posY += HAUTEUR
 
     def run(self):
-        self.main.mainloop()
+        self.continuer = True
+        while self.continuer:
 
+            self.main.update_idletasks()
+            self.main.update()
+            continue
+
+        return 0
 
 if __name__ == "__main__":
     lab = Labyrinthe(10, 30)
