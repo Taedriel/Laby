@@ -1,10 +1,11 @@
-import sys
 from random import randint, random
 from os import system
 
-from Traducteur import *
-from Case import *
+import sys
 
+from __const__ import *
+from _Case import Case
+from _Traducteur import Traducteur
 
 class Labyrinthe(object):
 
@@ -187,7 +188,7 @@ class Labyrinthe(object):
     # ==================================================================================================================
     def generate(self, stepByStep):
 
-        for i in range(self.tailleX * self.tailleY):
+        for _ in range(self.tailleX * self.tailleY):
             if stepByStep:
                 self.afficher()
                 system("pause")

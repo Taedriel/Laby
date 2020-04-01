@@ -1,5 +1,4 @@
-from CONST import *
-
+from __const__ import *
 
 class Pathfinder(object):
 
@@ -16,7 +15,7 @@ class Pathfinder(object):
     def findGoodPath(self):
         self.findAllPath(0)
 
-        min = None
+        mini = None
         pathValide = []
 
         for path in self.listeCircuit:
@@ -24,14 +23,14 @@ class Pathfinder(object):
                 pathValide.append(path)
 
         for path in pathValide:
-            if min is None:
-                min = len(path), path
+            if mini is None:
+                mini = len(path), path
             else:
-                if len(path) < min[0]:
-                    min = len(path), path
+                if len(path) < mini[0]:
+                    mini = len(path), path
 
-        if min is not None:
-            self.circuit = min[1]
+        if mini is not None:
+            self.circuit = mini[1]
         return None
 
     def bindPath(self):

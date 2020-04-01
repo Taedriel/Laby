@@ -1,5 +1,4 @@
-from CONST import *
-
+from __const__ import *
 
 class Traducteur(object):
     def __init__(self, labyrinthe, depart, arrivee):
@@ -15,9 +14,9 @@ class Traducteur(object):
         self.arrivee = arrivee
 
         self.labTrad = []
-        for i in range(self.tailleX * 2 + 1):
+        for _ in range(self.tailleX * 2 + 1):
             temp = []
-            for j in range(self.tailleY * 2 + 1):
+            for __ in range(self.tailleY * 2 + 1):
                 temp.append(WALL)
             self.labTrad.append(temp)
 

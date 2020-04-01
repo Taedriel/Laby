@@ -1,5 +1,4 @@
-from CONST import *
-
+from __const__ import *
 
 class Perso(object):
 

@@ -1,11 +1,13 @@
+# coding=<utf-8>
 from sys import argv
+from os import getcwd
 
-from Labyrinthe import Labyrinthe
-from Moteur import Moteur
-from Pathfinder import Pathfinder
-from Traducteur import Traducteur
+from Labyrinthe import *
 
 if __name__ == "__main__":
+
+    print(getcwd())
+
 
     if len(argv) == 1:
         lab1 = Labyrinthe(10, 10)
