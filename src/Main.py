@@ -7,12 +7,16 @@ import Labyrinthe as Lab_Pack
 if __name__ == "__main__":
 
     if len(argv) == 1:  
-        lab1 = Lab_Pack.Labyrinthe(10, 10)
-        lab1.generate(False)
+        lab = Lab_Pack.Labyrinthe(10, 10)
+        lab.generate(False)
+        trad = Lab_Pack.Traducteur(lab, lab.getDepart(), lab.getArrive())
+        trad.traduire()
+        trad.afficher(w="███", v="   ", p=" 0 ")
     else:
         if argv[1] == "-h":
-            print("help: python3 Labyrinthe.py [-h] | [-x (number) -y (number)] | [-step] | [-solve] | [-graph]")
+            print("help: python3 Labyrinthe.py [-h] | ([-x (number) -y (number)] | [-step] | [-solve] | [-graph] | [-v] | [-play])")
             exit(0)
+
 
         if "-x" in argv:
             try:
@@ -50,3 +54,16 @@ if __name__ == "__main__":
         if "-graph" in argv:
             mot = Lab_Pack.Moteur(trad.getLabTrad())
             mot.run()
+
+        if "-play" in argv:
+
+            perso = Lab_Pack.Perso(trad, trad.getDepart()[1], trad.getDepart()[2])
+            trad.setPerso(perso)
+
+            mot = Lab_Pack.Moteur(trad.getLabTrad(), trad.getPerso())
+            trad.addObserver(mot)
+
+            trad.setCell(trad.getDepart()[1], trad.getDepart()[2], Lab_Pack.PERSO)
+            mot.run()
+
+            exit(0)
