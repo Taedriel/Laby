@@ -48,7 +48,11 @@ class Traducteur(object):
         return self.get((x, y))
 
     def get(self, coord):
-        return self.labTrad[coord[0]][coord[1]]
+        try:
+            a = self.labTrad[coord[0]][coord[1]]
+        except IndexError:
+            a = None
+        return a
 
     def doAHole(self, taille):
         midY = int(self.getTailleY() / 2)

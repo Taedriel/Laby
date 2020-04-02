@@ -51,6 +51,109 @@ class Labyrinthe(object):
         t.traduire()
         t.afficher(w="███", v="   ")
 
+    def openWall(self, source, destination):
+
+            deltaY = destination.getPos()[0] - source.getPos()[0]
+            deltaX = destination.getPos()[1] - source.getPos()[1]
+
+            if deltaX == 0:
+                if deltaY == 0:
+                    print("erreur durant l'ouverture du chemin, les cases sont les même !", file=sys.stderr)
+                elif deltaY > 0:
+                    # mur du bas
+                    source.setWall(4)
+                    destination.setWall(1)
+                    for case in self.getGroup(destination.getId()):
+                        case.setId(source.getId())
+                else:
+                    # mur du haut
+                    source.setWall(1)
+                    destination.setWall(4)
+                    for case in self.getGroup(destination.getId()):
+                        case.setId(source.getId())
+            elif deltaX > 0:
+                # mur de droite
+                source.setWall(2)
+                destination.setWall(8)
+                for case in self.getGroup(destination.getId()):
+                    case.setId(source.getId())
+            else:
+                # mur de gauche
+                source.setWall(8)
+                destination.setWall(2)
+                for case in self.getGroup(destination.getId()):
+                    case.setId(source.getId())
+
+    def createOuverture(self, listeOuverture=()):
+        """
+        :type listeOuverture: Tuple(Int, Int)
+        """
+        if listeOuverture is None:
+            listeOuverture = []
+        while True:
+            if random() >= 0.5:
+                # axeY
+                if random() >= 0.5:
+                    posX = 0
+                    number = 8
+                else:
+                    posX = self.tailleX - 1
+                    number = 2
+                posY = randint(0, self.tailleY - 1)
+            else:
+                # axeX
+                if random() >= 0.5:
+                    posY = 0
+                    number = 1
+                else:
+                    posY = self.tailleY - 1
+                    number = 4
+                posX = randint(0, self.tailleX - 1)
+
+            if (posX, posY) not in listeOuverture:
+                break
+
+        # print(posX, posY)
+        self.getCell(posX, posY).setWall(number)
+        return posX, posY
+
+    def generate(self):
+        print("Génération d'un labyrinthe générique impossible", file=sys.stderr)
+
+
+class LabyrintheInfini(Labyrinthe):
+
+
+
+
+
+    def step(self):
+        print("on fait une row")
+
+
+
+    def generate(self, stepByStep):
+
+        for _ in range(self.tailleY):
+            if stepByStep:
+                self.afficher()
+                system("pause")
+
+            self.step()
+
+        self.depart = self.createOuverture()
+        self.arrivee = self.createOuverture([self.depart])
+
+
+
+    
+
+class LabyrintheParfait(Labyrinthe):
+
+    def __init__(self, tailleX, tailleY):
+        Labyrinthe.__init__(self, tailleX, tailleY)
+
+
     def getGroup(self, idCell):
         group = []
         for ligne in range(len(self.labyrinthe)):
@@ -106,73 +209,6 @@ class Labyrinthe(object):
             if case.getPos()[0] == p.getPos()[0] and case.getPos()[1] - 1 == p.getPos()[1]:
                 return p
 
-    def openWall(self, source, destination):
-
-        deltaY = destination.getPos()[0] - source.getPos()[0]
-        deltaX = destination.getPos()[1] - source.getPos()[1]
-
-        if deltaX == 0:
-            if deltaY == 0:
-                print("erreur durant l'ouverture du chemin, les cases sont les même !", file=sys.stderr)
-            elif deltaY > 0:
-                # mur du bas
-                source.setWall(4)
-                destination.setWall(1)
-                for case in self.getGroup(destination.getId()):
-                    case.setId(source.getId())
-            else:
-                # mur du haut
-                source.setWall(1)
-                destination.setWall(4)
-                for case in self.getGroup(destination.getId()):
-                    case.setId(source.getId())
-        elif deltaX > 0:
-            # mur de droite
-            source.setWall(2)
-            destination.setWall(8)
-            for case in self.getGroup(destination.getId()):
-                case.setId(source.getId())
-        else:
-            # mur de gauche
-            source.setWall(8)
-            destination.setWall(2)
-            for case in self.getGroup(destination.getId()):
-                case.setId(source.getId())
-
-    def createOuverture(self, listeOuverture=()):
-        """
-
-        :type listeOuverture: Tuple(Int, Int)
-        """
-        if listeOuverture is None:
-            listeOuverture = []
-        while True:
-            if random() >= 0.5:
-                # axeY
-                if random() >= 0.5:
-                    posX = 0
-                    number = 8
-                else:
-                    posX = self.tailleX - 1
-                    number = 2
-                posY = randint(0, self.tailleY - 1)
-            else:
-                # axeX
-                if random() >= 0.5:
-                    posY = 0
-                    number = 1
-                else:
-                    posY = self.tailleY - 1
-                    number = 4
-                posX = randint(0, self.tailleX - 1)
-
-            if (posX, posY) not in listeOuverture:
-                break
-
-        # print(posX, posY)
-        self.getCell(posX, posY).setWall(number)
-        return posX, posY
-
     def step(self):
 
         number = self.labyrinthe[randint(0, self.tailleX - 1)][randint(0, self.tailleY - 1)].getNumber()
@@ -185,7 +221,6 @@ class Labyrinthe(object):
             origine = self.getNearestCaseInGroupOf(destination, number)
             self.openWall(origine, destination)
 
-    # ==================================================================================================================
     def generate(self, stepByStep):
 
         for _ in range(self.tailleX * self.tailleY):

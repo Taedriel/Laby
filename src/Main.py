@@ -7,7 +7,7 @@ import Labyrinthe as Lab_Pack
 if __name__ == "__main__":
 
     if len(argv) == 1:  
-        lab = Lab_Pack.Labyrinthe(10, 10)
+        lab = Lab_Pack.LabyrintheParfait(10, 10)
         lab.generate(False)
         trad = Lab_Pack.Traducteur(lab, lab.getDepart(), lab.getArrive())
         trad.traduire()
@@ -39,7 +39,7 @@ if __name__ == "__main__":
         else:
             stepByStep = False
 
-        lab = Lab_Pack.Labyrinthe(tailleX, tailleY)
+        lab = Lab_Pack.LabyrintheParfait(tailleX, tailleY)
         lab.generate(stepByStep)
         trad = Lab_Pack.Traducteur(lab, lab.getDepart(), lab.getArrive())
         trad.traduire()
